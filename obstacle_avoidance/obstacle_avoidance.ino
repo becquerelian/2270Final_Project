@@ -1,5 +1,5 @@
 // Define pins
-const int pinPulse = 5;
+const int triggerPin = 5;
 const int pinON = 6;            // D6 is on/off switch, active LOW
 const int pinRightForward = 7;  // connect D7 to FWD
 const int pinRightBackward = 8; // connect D8 to BACK
@@ -18,7 +18,7 @@ const int maxPWM = 200;
 /* CODE */
 
 void setup() {
-  pinMode(pinPulse, INPUT);
+  pinMode(triggerPin, INPUT);
   pinMode(pinON, INPUT_PULLUP);
   pinMode(pinLeftForward, OUTPUT);
   pinMode(pinLeftBackward, OUTPUT);
@@ -34,11 +34,6 @@ void setup() {
   digitalWrite(pinRightForward, LOW);
   digitalWrite(pinRightBackward, LOW);
 
-  // Set up interrupts
-  attachInterrupt(digitalPinToInterrupt(6), service6, RISING);
-  attachInterrupt(digitalPinToInterrupt(2), service2, RISING);
-  attachInterrupt(digitalPinToInterrupt(4), service4, RISING);
-
   // Set up serial monitor
   Serial.begin(9600);
 }
@@ -48,7 +43,7 @@ void loop() {
   moveForward(500);
 
   // Put out ultrasonic pulses
-  long duration = pulseIn(5, HIGH);
+  long duration = pulseIn(triggerPin, HIGH);
   int distance = duration * 0.034/2;
   Serial.println(distance);
   delay(1000);

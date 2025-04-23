@@ -1,16 +1,19 @@
+const int echoPin = 5;
+const int trigPin = 9;
+
 void setup() {
-  pinMode(5, INPUT);
-  pinMode(9, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(trigPin, OUTPUT);
 
   // set Vref
-  analogWrite(9, 200);
+  analogWrite(trigPin, 200);
 
   // Set up serial monitor
   Serial.begin(9600);
 }
 
 void loop() {
-  long duration = pulseIn(5, HIGH);
+  long duration = pulseIn(echoPin, HIGH);
   int distance = duration * 0.034/2;
   Serial.println(distance);
   delay(1000);
