@@ -11,21 +11,6 @@
   Original Creation Date: September 19th, 2023
   https://github.com/sparkfun/SparkFun_STHS34PF80_Arduino_Library
 
-  Development environment specifics:
-
-  IDE: Arduino 2.2.1
-  Hardware Platform: SparkFun RedBoard Qwiic	
-  SparkFun Human Presence and Motion Sensor - STHS34PF80 (Qwiic) Version: 1.0
-  SparkFun Qwiic Mini Human Presence and Motion Sensor - STHS34PF80 Version: 1.0
-
-  Do you like this library? Help support SparkFun. Buy a board!
-
-    SparkFun Human Presence and Motion Sensor - STHS34PF80 (Qwiic)
-    https://www.sparkfun.com/products/22494
-    
-    SparkFun Qwiic Mini Human Presence and Motion Sensor - STHS34PF80
-    https://www.sparkfun.com/products/23253
-
   Hardware Connections:
   Wire the SPI Connections from the RedBoard Qwiic to the STHS34PF80 Breakout 
   with a resistive divider using the header pins like so: 
@@ -36,14 +21,6 @@
   !CS (10) --> Chip Select
   3.3V --> 3.3V
   GND --> GND
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 
 #include "SparkFun_STHS34PF80_Arduino_Library.h"
@@ -60,7 +37,7 @@ uint8_t chipSelect = 10;
 
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("STHS34PF80 Example 4: SPI Functionality");
 
     // Configure the chip select pin
