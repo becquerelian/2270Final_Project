@@ -1,3 +1,5 @@
+/* SETUP */
+
 // Define pins
 const int triggerPin = 5;
 const int pinON = 6;            // D6 is on/off switch, active LOW
@@ -14,8 +16,6 @@ volatile int leftPulses = 0;
 
 // Define const
 const int maxPWM = 200;
-
-/* CODE */
 
 void setup() {
   pinMode(triggerPin, INPUT);
@@ -38,6 +38,8 @@ void setup() {
   Serial.begin(9600);
 }
 
+/* LOOP */
+
 void loop() {
   // Roll forward
   moveForward(500);
@@ -52,112 +54,4 @@ void loop() {
   if(distance < 100){
     turnClockwise(500);
   }
-}
-
-
-/* FUNCTIONS */
-
-void moveForward(int numPulses) {
-  int slowDownThreshold = numPulses - (numPulses / 4);
-  int currentPWM = 100;
-  rightPulses = 0;
-  leftPulses = 0;
-
-  // roll
-  while((rightPulses < numPulses) && (leftPulses < numPulses)) {
-    if(rightPulses < slowDownThreshold) {
-        currentPWM = min(currentPWM + 2, maxPWM);
-    }
-
-    if(rightPulses > slowDownThreshold) {
-        currentPWM = max(currentPWM - 0.5, 100);
-    }
-
-    // set Vref
-    analogWrite(pinLeftPWM, currentPWM);
-    analogWrite(pinRightPWM, currentPWM);
-
-    // move
-    digitalWrite(pinLeftForward, HIGH);
-    digitalWrite(pinRightForward, HIGH);
-  }
-
-  // stop
-  digitalWrite(pinLeftForward, LOW);
-  digitalWrite(pinRightForward, LOW);
-
-  Serial.println(rightPulses);
-  Serial.println(leftPulses);
-
-  Serial.println("Forward");
-}
-
-void turnClockwise(int numPulses) {
-  int slowDownThreshold = numPulses - (numPulses / 4);
-  int currentPWM = 100;
-  rightPulses = 0;
-  leftPulses = 0;
-
-  // turn
-  while((leftPulses < numPulses)) {
-    if(leftPulses < slowDownThreshold) {
-        currentPWM = min(currentPWM + 2, maxPWM);
-    }
-
-    if(leftPulses > slowDownThreshold) {
-        currentPWM = max(currentPWM - 0.5, 100);
-    }
-
-    // set Vref
-    analogWrite(pinLeftPWM, currentPWM);
-    analogWrite(pinRightPWM, currentPWM);
-
-    // move
-    digitalWrite(pinLeftForward, HIGH);
-    digitalWrite(pinRightBackward, HIGH);
-  }
-
-  // stop
-  digitalWrite(pinLeftForward, LOW);
-  digitalWrite(pinRightBackward, LOW);
-
-  Serial.println(rightPulses);
-  Serial.println(leftPulses);
-
-  Serial.println("CW");
-}
-
-void turnCounterClockwise(int numPulses) {
-  int slowDownThreshold = numPulses - (numPulses / 4);
-  int currentPWM = 100;
-  rightPulses = 0;
-  leftPulses = 0;
-
-  // turn
-  while((rightPulses < numPulses)) {
-    if(rightPulses < slowDownThreshold) {
-        currentPWM = min(currentPWM + 2, maxPWM);
-    }
-
-    if(rightPulses > slowDownThreshold) {
-        currentPWM = max(currentPWM - 0.5, 100);
-    }
-
-    // set Vref
-    analogWrite(pinRightPWM, currentPWM);
-    analogWrite(pinLeftPWM, currentPWM);
-
-    // move
-    digitalWrite(pinRightForward, HIGH);
-    digitalWrite(pinLeftBackward, HIGH);
-  }
-
-  // stop
-  digitalWrite(pinRightForward, LOW);
-  digitalWrite(pinLeftBackward, LOW);
-
-  Serial.println(rightPulses);
-  Serial.println(leftPulses);
-
-  Serial.println("CCW");
 }
