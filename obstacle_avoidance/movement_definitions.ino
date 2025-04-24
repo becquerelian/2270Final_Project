@@ -1,3 +1,5 @@
+// Rolls forward for a given number of encoder pulses
+// Accelerates and deccelerates
 void moveForward(int numPulses) {
   int slowDownThreshold = numPulses - (numPulses / 4);
   int currentPWM = 100;
@@ -33,6 +35,8 @@ void moveForward(int numPulses) {
   Serial.println("Forward");
 }
 
+// Turns clockwise for a given number of encoder pulses
+// Accelerates and deccelerates
 void turnClockwise(int numPulses) {
   int slowDownThreshold = numPulses - (numPulses / 4);
   int currentPWM = 100;
@@ -68,6 +72,8 @@ void turnClockwise(int numPulses) {
   Serial.println("CW");
 }
 
+// Turns counterclockwise for a given number of encoder pulses
+// Accelerates and deccelerates
 void turnCounterClockwise(int numPulses) {
   int slowDownThreshold = numPulses - (numPulses / 4);
   int currentPWM = 100;

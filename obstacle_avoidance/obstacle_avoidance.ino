@@ -1,57 +1,71 @@
 /* SETUP */
 
-// Define pins
-const int triggerPin = 5;
-const int pinON = 6;            // D6 is on/off switch, active LOW
-const int pinRightForward = 7;  // connect D7 to FWD
-const int pinRightBackward = 8; // connect D8 to BACK
-const int pinRightPWM = 9;      // connect D9 to right Vref via Left RC LPF
-const int pinLeftPWM = 10;      // connect D10 to left Vref via Left RC LPF
-const int pinLeftForward = 11;  // connect D11 to FWD
-const int pinLeftBackward = 12; // connect D12 to BACK
+// Motor control pins
+const int pinRightForward = 7;  // D7 = right FWD
+const int pinRightBackward = 8; // D8 = right BACK
+const int pinRightPWM = 9;      // D9 = right Vref
+const int pinLeftPWM = 10;      // D10 = left Vref
+const int pinLeftForward = 11;  // D11 = left FWD
+const int pinLeftBackward = 12; // D12 = left BACK
 
-// Define variables
+// Ultrasonic pins
+const int echoPin = 3;          // D3 = receives pulse, reads distance
+const int triggerPin = 5;       // D5 = sends pulse
+
+// Other pins
+const int pinON = 6;            // D6 = button, active LOW
+const int LEDPin = 13;          // D13 = onboard LED (for testing)
+
+// Variables
 volatile int rightPulses = 0;
 volatile int leftPulses = 0;
 
-// Define const
+// Constants
 const int maxPWM = 200;
 
 void setup() {
-  pinMode(triggerPin, INPUT);
-  pinMode(pinON, INPUT_PULLUP);
+  // Motor control
   pinMode(pinLeftForward, OUTPUT);
   pinMode(pinLeftBackward, OUTPUT);
   pinMode(pinLeftPWM, OUTPUT);
   pinMode(pinRightForward, OUTPUT);
   pinMode(pinRightBackward, OUTPUT);
   pinMode(pinRightPWM, OUTPUT);
-  pinMode(13, OUTPUT);  // LED
 
-  // Stop
+  // Stop motor
   digitalWrite(pinLeftForward, LOW);
   digitalWrite(pinLeftBackward, LOW);
   digitalWrite(pinRightForward, LOW);
   digitalWrite(pinRightBackward, LOW);
 
+  // Ultrasonic
+  pinMode(triggerPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  // Other
+  pinMode(pinON, INPUT_PULLUP);
+  pinMode(LEDPin, OUTPUT);
+
   // Set up serial monitor
   Serial.begin(9600);
 }
 
-/* LOOP */
+/* CODE LOOP */
 
 void loop() {
-  // Roll forward
-  moveForward(500);
+  // Define distance
+  float distance = 0;
 
-  // Put out ultrasonic pulses
-  long duration = pulseIn(triggerPin, HIGH);
-  int distance = duration * 0.034/2;
+  // Roll forward
+  moveForward(100);
+
+  // Check distance
+  distance = readDistance();
   Serial.println(distance);
-  delay(1000);
 
   // Check for obstacle
-  if(distance < 100){
-    turnClockwise(500);
+  if(distance < 50){
+    Serial.println("Turning");
+    turnClockwise(100);
   }
 }

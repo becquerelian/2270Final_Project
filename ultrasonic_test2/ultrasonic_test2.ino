@@ -10,8 +10,8 @@
 */
 
 // Define the pin numbers for the ultrasonic sensor
-const int echoPin = 4;  // I believe pin 4 should be able to take inputs
-const int trigPin = 3;  // ~ on the pinout means it's a PWM pin (meaning it can output?)
+const int echoPin = 3;
+const int trigPin = 5;
 
 void setup() {
   Serial.begin(9600);                    // Start serial communication with a baud rate of 9600
