@@ -26,7 +26,7 @@
 
 STHS34PF80_I2C mySensor;
 
-// Motor control pins
+// Motor control
 const int pinRightForward = 7;  // D7 = right FWD
 const int pinRightBackward = 8; // D8 = right BACK
 const int pinRightPWM = 9;      // D9 = right Vref
@@ -34,26 +34,32 @@ const int pinLeftPWM = 10;      // D10 = left Vref
 const int pinLeftForward = 11;  // D11 = left FWD
 const int pinLeftBackward = 12; // D12 = left BACK
 
-// Ultrasonic sensor pins
+const int maxPWM = 200;
+
+volatile int rightPulses = 0;
+volatile int leftPulses = 0;
+
+// Ultrasonic sensor
 const int echoPin = 3;          // D3 = receives pulse, reads distance
 const int triggerPin = 5;       // D5 = sends pulse
 
-// Presence sensor pins
-const int intPin = 2;           // D2 = interrupt
+// Presence sensor
+const int intPin = 14;          // D14 = interrupt
 
-// Other pins
-const int buttonPin = 6;        // D6 = button, active LOW
-const int LEDPin = 13;          // D13 = onboard LED (for testing)
-
-// Constants
-const int maxPWM = 200;
-int noteDuration = 20;
-
-// Variables
-volatile int rightPulses = 0;
-volatile int leftPulses = 0;
 int16_t presenceVal = 0;
 bool volatile interruptFlag = false;
+
+// Speaker
+const int speakerPin = 15;     // D15 = speaker
+int melody[] = {NOTE_A4};
+int noteDurations[] = {20};
+int speed = 90;
+
+// Other pins
+const int rightEncoderPin = 2;  // D2 = right encoder interrupt
+const int leftEncoderPin = 4;   // D4 = left encoder interrupt
+const int buttonPin = 6;        // D6 = button, active LOW
+const int LEDPin = 13;          // D13 = onboard LED (for testing)
 
 
 void setup() {
@@ -93,9 +99,9 @@ void setup() {
   pinMode(LEDPin, OUTPUT);
 
   // INTERRUPTS
-  attachInterrupt(digitalPinToInterrupt(2), rightCounter, RISING);
-  attachInterrupt(digitalPinToInterrupt(4), leftCounter, RISING);
-  attachInterrupt(digitalPinToInterrupt(6), buttonInterrupt, RISING);
+  attachInterrupt(digitalPinToInterrupt(rightEncoderPin), rightCounter, RISING);
+  attachInterrupt(digitalPinToInterrupt(leftEncoderPin), leftCounter, RISING);
+  attachInterrupt(digitalPinToInterrupt(buttonPin), buttonInterrupt, RISING);
 
   // Presence sensor
   attachInterrupt(digitalPinToInterrupt(intPin), humanDetected, CHANGE);
@@ -132,13 +138,17 @@ void loop() {
     sths34pf80_tmos_func_status_t status;
     getData(status);
 
+    // If there is a presence
+    if(presenceDetected(status)){
     // As long as there is a presence
-    while(presenceDetected(status)){
-      // Turn either TOWARDS or AWAY FROM the presence
+      while(presenceDetected(status)){
+        // Turn either TOWARDS or AWAY FROM the presence
+        turnCounterClockwise(100);
+      }
       // then run forward
+      moveForward(1000);
       // and activate speaker sound
-
-      // until presence flag == 0 ?
+      playTone();
     }
   }
 
