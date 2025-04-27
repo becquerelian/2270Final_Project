@@ -1,28 +1,28 @@
 /*
   ULTRASONIC SENSOR WIRING:
   Left
-  VCC --> VCC
-  D3 --> Echo
-  D5 --> Trig
-  GND --> GND
+    VCC --> VCC
+    D3 --> Echo
+    D5 --> Trig
+    GND --> GND
 
   Right
-  VCC --> VCC
-  D20 --> Echo
-  D21 --> Trig
-  GND --> GND
+    VCC --> VCC
+    D20 --> Echo
+    D21 --> Trig
+    GND --> GND
 
   PRESENCE SENSOR WIRING:
-  ARDUINO --> STHS34PF80
-  SDA (A4 / D18) --> SDA
-  SCL (A5 / D19) --> SCL
-  INT (D14) --> INT
-  3.3V --> 3.3V
-  GND --> GND
+    ARDUINO --> STHS34PF80
+    SDA (A4 / D18) --> SDA
+    SCL (A5 / D19) --> SCL
+    INT (D14) --> INT
+    3.3V --> 3.3V
+    GND --> GND
 
   SPEAKER WIRING:
-  BLACK --> GND
-  RED --> D15
+    BLACK --> GND
+    RED --> D15
 */
 
 #include "SparkFun_STHS34PF80_Arduino_Library.h"
@@ -54,7 +54,7 @@ const int rightTriggerPin = 21;     // D21 = sends pulse
 const int interruptPin = 14;        // D14 = interrupt
 
 int16_t presenceVal = 0;
-bool volatile interruptFlag = false;
+volatile bool interruptFlag = false;
 
 // Speaker
 const int speakerPin = 15;     // D15 = speaker

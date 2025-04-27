@@ -13,5 +13,5 @@ void humanDetected() {
 
 // Button
 void buttonInterrupt() {
-  digitalWrite(13, HIGH); // turn LED on
+  digitalWrite(LEDPin, HIGH); // turn LED on
 }
