@@ -1,23 +1,28 @@
 /*
-  Scroll to bottom for code loop
-  
   ULTRASONIC SENSOR WIRING:
+  Left
   VCC --> VCC
   D3 --> Echo
   D5 --> Trig
   GND --> GND
 
+  Right
+  VCC --> VCC
+  D20 --> Echo
+  D21 --> Trig
+  GND --> GND
+
   PRESENCE SENSOR WIRING:
   ARDUINO --> STHS34PF80
-  SDA (A4) --> SDA
-  SCL (A5) --> SCL
-  INT (2) --> INT
+  SDA (A4 / D18) --> SDA
+  SCL (A5 / D19) --> SCL
+  INT (D14) --> INT
   3.3V --> 3.3V
   GND --> GND
 
   SPEAKER WIRING:
   BLACK --> GND
-  RED --> D?
+  RED --> D15
 */
 
 #include "SparkFun_STHS34PF80_Arduino_Library.h"
@@ -40,17 +45,20 @@ volatile int rightPulses = 0;
 volatile int leftPulses = 0;
 
 // Ultrasonic sensor
-const int echoPin = 3;          // D3 = receives pulse, reads distance
-const int triggerPin = 5;       // D5 = sends pulse
+const int leftEchoPin = 3;          // D3 = receives pulse, reads distance
+const int leftTriggerPin = 5;       // D5 = sends pulse
+const int rightEchoPin = 20;        // D20 = receives pulse, reads distance
+const int rightTriggerPin = 21;     // D21 = sends pulse
 
 // Presence sensor
-const int intPin = 14;          // D14 = interrupt
+const int interruptPin = 14;        // D14 = interrupt
 
 int16_t presenceVal = 0;
 bool volatile interruptFlag = false;
 
 // Speaker
 const int speakerPin = 15;     // D15 = speaker
+
 int melody[] = {NOTE_A4};
 int noteDurations[] = {20};
 int speed = 90;
@@ -78,8 +86,10 @@ void setup() {
   digitalWrite(pinRightBackward, LOW);
 
   // ULTRASONIC SENSOR
-  pinMode(triggerPin, OUTPUT);
-  pinMode(echoPin, INPUT);
+  pinMode(leftTriggerPin, OUTPUT);
+  pinMode(leftEchoPin, INPUT);
+  pinMode(rightTriggerPin, OUTPUT);
+  pinMode(rightEchoPin, INPUT);
 
   // PRESENCE SENSOR
 
@@ -92,7 +102,7 @@ void setup() {
     while(1);
   }
 
-  pinMode(intPin, INPUT);
+  pinMode(interruptPin, INPUT);
 
   // OTHER
   pinMode(buttonPin, INPUT_PULLUP);
@@ -104,7 +114,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(buttonPin), buttonInterrupt, RISING);
 
   // Presence sensor
-  attachInterrupt(digitalPinToInterrupt(intPin), humanDetected, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), humanDetected, CHANGE);
 
   // Route all interrupts from device to interrupt pin
   mySensor.setTmosRouteInterrupt(STHS34PF80_TMOS_INT_OR);
@@ -125,7 +135,7 @@ void setup() {
 
 void loop() {
   // Roll forward as long as no obstacle
-  while(readDistance() > 50){
+  while(readDistanceRight() > 50 && readDistanceLeft() > 50){
     moveForward(100);
   }
 
@@ -154,5 +164,17 @@ void loop() {
 
   // Turn away from obstacle
   delay(500);
-  turnClockwise(100);
+
+  // Right sensor detects obstacle
+  if(readDistanceRight() <= 50){
+    turnCounterClockwise(100);
+  }
+  // Left sensor detects obstacle
+  if(readDistanceLeft() <= 50){
+    turnClockwise(100);
+  }
+  // Both sensors detect obstacle
+  if(readDistanceLeft() <= 50 && readDistanceRight() <= 50){
+    turnClockwise(100);
+  }
 }
