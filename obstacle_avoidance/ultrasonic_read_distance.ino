@@ -1,8 +1,8 @@
 // Reads the sensor data and calculates the distance
 float readDistance() {
-  digitalWrite(triggerPin, LOW);   // Set trig pin to low to ensure a clean pulse
-  delayMicroseconds(2);         // Delay for 2 microseconds
-  digitalWrite(triggerPin, HIGH);  // Send a 10 microsecond pulse by setting trig pin to high
+  digitalWrite(triggerPin, LOW);  // Set trig pin to low to ensure a clean pulse
+  delayMicroseconds(2);           // Delay for 2 microseconds
+  digitalWrite(triggerPin, HIGH); // Send a 10 microsecond pulse by setting trig pin to high
   delayMicroseconds(10);
   digitalWrite(triggerPin, LOW);  // Set trig pin back to low
 

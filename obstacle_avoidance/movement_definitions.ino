@@ -1,5 +1,4 @@
 // Rolls forward for a given number of encoder pulses
-// Accelerates and deccelerates
 void moveForward(int numPulses) {
   int slowDownThreshold = numPulses - (numPulses / 4);
   int currentPWM = 100;
@@ -8,10 +7,11 @@ void moveForward(int numPulses) {
 
   // roll
   while((rightPulses < numPulses) && (leftPulses < numPulses)) {
+    // accelerate
     if(rightPulses < slowDownThreshold) {
         currentPWM = min(currentPWM + 2, maxPWM);
     }
-
+    // deccelerate
     if(rightPulses > slowDownThreshold) {
         currentPWM = max(currentPWM - 0.5, 100);
     }
@@ -45,10 +45,11 @@ void turnClockwise(int numPulses) {
 
   // turn
   while((leftPulses < numPulses)) {
+    // accelerate
     if(leftPulses < slowDownThreshold) {
         currentPWM = min(currentPWM + 2, maxPWM);
     }
-
+    // deccelerate
     if(leftPulses > slowDownThreshold) {
         currentPWM = max(currentPWM - 0.5, 100);
     }
@@ -82,10 +83,11 @@ void turnCounterClockwise(int numPulses) {
 
   // turn
   while((rightPulses < numPulses)) {
+    // accelerate
     if(rightPulses < slowDownThreshold) {
         currentPWM = min(currentPWM + 2, maxPWM);
     }
-
+    // deccelerate
     if(rightPulses > slowDownThreshold) {
         currentPWM = max(currentPWM - 0.5, 100);
     }

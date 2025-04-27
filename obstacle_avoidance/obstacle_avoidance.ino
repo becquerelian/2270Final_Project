@@ -1,5 +1,3 @@
-/* SETUP */
-
 // Motor control pins
 const int pinRightForward = 7;  // D7 = right FWD
 const int pinRightBackward = 8; // D8 = right BACK
@@ -13,7 +11,7 @@ const int echoPin = 3;          // D3 = receives pulse, reads distance
 const int triggerPin = 5;       // D5 = sends pulse
 
 // Other pins
-const int pinON = 6;            // D6 = button, active LOW
+const int buttonPin = 6;            // D6 = button, active LOW
 const int LEDPin = 13;          // D13 = onboard LED (for testing)
 
 // Variables
@@ -43,29 +41,28 @@ void setup() {
   pinMode(echoPin, INPUT);
 
   // Other
-  pinMode(pinON, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT_PULLUP);
   pinMode(LEDPin, OUTPUT);
+
+  // Set up interrupts
+  attachInterrupt(digitalPinToInterrupt(2), rightCounter, RISING);
+  attachInterrupt(digitalPinToInterrupt(4), leftCounter, RISING);
+  attachInterrupt(digitalPinToInterrupt(6), buttonInterrupt, RISING);
 
   // Set up serial monitor
   Serial.begin(9600);
 }
 
+
 /* CODE LOOP */
 
 void loop() {
-  // Define distance
-  float distance = 0;
-
-  // Roll forward
-  moveForward(100);
-
-  // Check distance
-  distance = readDistance();
-  Serial.println(distance);
-
-  // Check for obstacle
-  if(distance < 50){
-    Serial.println("Turning");
-    turnClockwise(100);
+  // Roll forward as long as no obstacle
+  while(readDistance() > 50){
+    moveForward(100);
   }
+
+  // Obstacle detected
+  delay(500);
+  turnClockwise(100);
 }
