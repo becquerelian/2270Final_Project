@@ -15,7 +15,7 @@
   ARDUINO --> STHS34PF80
   SDA (A4) --> SDA
   SCL (A5) --> SCL
-  INT (2) --> INT
+  INT (D14) --> INT
   3.3V --> 3.3V
   GND --> GND
 ******************************************************************************/
@@ -29,7 +29,7 @@ STHS34PF80_I2C mySensor;
 int16_t presenceVal = 0;
 
 // Change the pin number to the pin that has been chosen for your setup
-int intPin = 2;
+int intPin = 14;
 
 // Star the flag as false
 bool volatile interruptFlag = false;

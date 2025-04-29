@@ -22,3 +22,12 @@ float readDistanceLeft() {
   float distance = pulseIn(leftEchoPin, HIGH) / 58.00;  // Formula: (340m/s * 1us) / 2
   return distance;
 }
+
+// Print statements for debugging
+void ultrasonicDebug() {
+  Serial.print(readDistanceRight());
+  Serial.println(" cm R");
+
+  Serial.print(readDistanceLeft());
+  Serial.println(" cm L");
+}
