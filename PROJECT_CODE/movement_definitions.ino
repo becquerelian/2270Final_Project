@@ -6,7 +6,7 @@ void moveForward(int numPulses) {
   leftPulses = 0;
 
   // roll
-  while((rightPulses < numPulses) && (leftPulses < numPulses)) {
+  while((rightPulses < numPulses) && (leftPulses < numPulses) && (readDistanceRight() > obstacleDistance) && (readDistanceLeft() > obstacleDistance)) {
     // accelerate
     if(rightPulses < slowDownThreshold) {
         currentPWM = min(currentPWM + 2, maxPWM);

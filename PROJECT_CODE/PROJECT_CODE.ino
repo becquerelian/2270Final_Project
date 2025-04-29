@@ -139,7 +139,7 @@ void setup() {
 void loop() {
   // Roll forward as long as no obstacle
   while(readDistanceRight() > obstacleDistance && readDistanceLeft() > obstacleDistance){
-    moveForward(10);
+    moveForward(1000);
   }
 
   // OBSTACLE DETECTED
