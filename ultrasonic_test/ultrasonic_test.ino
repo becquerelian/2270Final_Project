@@ -10,8 +10,8 @@
 */
 
 // Define the pin numbers for the ultrasonic sensor
-const int echoPin = 3;
-const int trigPin = 5;
+const int echoPin = 20;
+const int trigPin = 21;
 
 void setup() {
   Serial.begin(9600);                    // Start serial communication with a baud rate of 9600

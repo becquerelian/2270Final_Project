@@ -71,6 +71,9 @@ const int LEDPin = 13;          // D13 = onboard LED (for testing)
 
 
 void setup() {
+  // SERIAL MONITOR
+  Serial.begin(9600);
+
   // MOTOR CONTROL
   pinMode(pinLeftForward, OUTPUT);
   pinMode(pinLeftBackward, OUTPUT);
@@ -85,11 +88,15 @@ void setup() {
   digitalWrite(pinRightForward, LOW);
   digitalWrite(pinRightBackward, LOW);
 
+  Serial.println("Motor control setup done");
+
   // ULTRASONIC SENSOR
   pinMode(leftTriggerPin, OUTPUT);
   pinMode(leftEchoPin, INPUT);
   pinMode(rightTriggerPin, OUTPUT);
   pinMode(rightEchoPin, INPUT);
+
+  Serial.println("Ultrasonic sensor setup done");
 
   // PRESENCE SENSOR
 
@@ -103,6 +110,8 @@ void setup() {
   }
 
   pinMode(interruptPin, INPUT);
+
+  Serial.println("Presence sensor setup done");
 
   // OTHER
   pinMode(buttonPin, INPUT_PULLUP);
@@ -126,8 +135,7 @@ void setup() {
   // Set interrupt value to pulsed on the INT pin
   mySensor.setInterruptPulsed(0);
 
-  // SERIAL MONITOR
-  Serial.begin(9600);
+  Serial.println("Begin test");
 }
 
 
@@ -136,11 +144,13 @@ void setup() {
 void loop() {
   // Roll forward as long as no obstacle
   while(readDistanceRight() > 50 && readDistanceLeft() > 50){
-    moveForward(100);
+    //moveForward(100);
+    Serial.println("No obstacle:)");
+    delay(400);
   }
 
   // OBSTACLE DETECTED
-
+  
   // If interrupt is triggered
   // (can trigger due to PRESENCE, MOTION, or AMBIENT TEMP CHANGE)
   if(interruptTriggered()){
@@ -148,8 +158,15 @@ void loop() {
     sths34pf80_tmos_func_status_t status;
     getData(status);
 
+    Serial.println("Data ready!");
+
     // If there is a presence
     if(presenceDetected(status)){
+      Serial.print("Presence: ");
+      Serial.print(presenceVal);
+      Serial.println("cm^-1");
+
+    /*
     // As long as there is a presence
       while(presenceDetected(status)){
         // Turn either TOWARDS or AWAY FROM the presence
@@ -159,22 +176,47 @@ void loop() {
       moveForward(1000);
       // and activate speaker sound
       playTone();
+      */
     }
   }
-
+  
   // Turn away from obstacle
   delay(500);
 
-  // Right sensor detects obstacle
-  if(readDistanceRight() <= 50){
-    turnCounterClockwise(100);
-  }
-  // Left sensor detects obstacle
-  if(readDistanceLeft() <= 50){
-    turnClockwise(100);
-  }
   // Both sensors detect obstacle
   if(readDistanceLeft() <= 50 && readDistanceRight() <= 50){
-    turnClockwise(100);
+    //turnClockwise(100);
+
+    // Debugging
+    Serial.print(readDistanceRight());           // Print the distance value
+    Serial.println(" cm R");            // Print " cm" to indicate the unit of measurement
+
+    Serial.print(readDistanceLeft());           // Print the distance value
+    Serial.println(" cm L");            // Print " cm" to indicate the unit of measurement
+    
+    Serial.println("Turning awayy");
+    delay(400);
+  }
+  // Right sensor detects obstacle
+  else if(readDistanceRight() <= 50){
+    //turnCounterClockwise(100);
+
+    // Debugging
+    Serial.print(readDistanceRight());
+    Serial.println(" cm R");
+    
+    Serial.println("Turning CCW");
+    delay(400);
+  }
+  // Left sensor detects obstacle
+  else if(readDistanceLeft() <= 50){
+    //turnClockwise(100);
+
+    // Debugging
+    Serial.print(readDistanceLeft());
+    Serial.println(" cm L");
+    
+    Serial.println("Turning CW");
+    delay(400);
   }
 }
