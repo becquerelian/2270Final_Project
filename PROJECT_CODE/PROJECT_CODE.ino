@@ -40,6 +40,7 @@ const int pinLeftForward = 11;  // D11 = left FWD
 const int pinLeftBackward = 12; // D12 = left BACK
 
 const int maxPWM = 200;
+const int obstacleDistance = 50;
 
 volatile int rightPulses = 0;
 volatile int leftPulses = 0;
@@ -59,7 +60,7 @@ volatile bool interruptFlag = false;
 // Speaker
 const int speakerPin = 15;     // D15 = speaker
 
-int melody[] = {NOTE_A4};
+int melody[] = {NOTE_DS8};
 int noteDurations[] = {20};
 int speed = 90;
 
@@ -137,10 +138,8 @@ void setup() {
 
 void loop() {
   // Roll forward as long as no obstacle
-  while(readDistanceRight() > 50 && readDistanceLeft() > 50){
-    //moveForward(100);
-    //Serial.println("No obstacle:)");
-    delay(400);
+  while(readDistanceRight() > obstacleDistance && readDistanceLeft() > obstacleDistance){
+    moveForward(10);
   }
 
   // OBSTACLE DETECTED
@@ -161,42 +160,29 @@ void loop() {
       Serial.print(presenceVal);
       Serial.println("cm^-1");
       
+      // activate speaker sound
+      playTone();
       // Turn either TOWARDS or AWAY FROM the presence
       // (currently away)
-      //turnCounterClockwise(1100);
+      turnCounterClockwise(1100);
       // then run forward
-      //moveForward(1000);
-      // and activate speaker sound
-      // (need to check the length and tone)
-      //playTone();
+      moveForward(2900);
     }
   }
   
   // Turn away from obstacle
-  delay(500);
+  delay(200);
 
   // Both sensors detect obstacle
-  if(readDistanceLeft() <= 50 && readDistanceRight() <= 50){
-    //turnClockwise(100);
-
-    //Serial.println("Turning away:");
-    //ultrasonicDebug();
-    delay(400);
+  if(readDistanceLeft() <= obstacleDistance && readDistanceRight() <= obstacleDistance){
+    turnClockwise(100);
   }
   // Right sensor detects obstacle
-  else if(readDistanceRight() <= 50){
-    //turnCounterClockwise(100);
-
-    //Serial.println("Turning CCW:");
-    //ultrasonicDebug();
-    delay(400);
+  else if(readDistanceRight() <= obstacleDistance){
+    turnCounterClockwise(100);
   }
   // Left sensor detects obstacle
-  else if(readDistanceLeft() <= 50){
-    //turnClockwise(100);
-
-    //Serial.println("Turning CW:");
-    //ultrasonicDebug();
-    delay(400);
+  else if(readDistanceLeft() <= obstacleDistance){
+    turnClockwise(100);
   }
 }
