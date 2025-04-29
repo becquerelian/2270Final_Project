@@ -156,11 +156,7 @@ void loop() {
 
     // If there is a presence
     if(status.pres_flag == 1){
-      Serial.print("Presence: ");
-      Serial.print(presenceVal);
-      Serial.println("cm^-1");
-      
-      // activate speaker sound
+      // Activate speaker sound
       playTone();
       // Turn either TOWARDS or AWAY FROM the presence
       // (currently away)
@@ -175,7 +171,13 @@ void loop() {
 
   // Both sensors detect obstacle
   if(readDistanceLeft() <= obstacleDistance && readDistanceRight() <= obstacleDistance){
-    turnClockwise(100);
+    // Pick a random direction
+    if(random(99) % 2 == 0){
+      turnCounterClockwise(100);
+    }
+    else{
+      turnClockwise(100);
+    }
   }
   // Right sensor detects obstacle
   else if(readDistanceRight() <= obstacleDistance){
