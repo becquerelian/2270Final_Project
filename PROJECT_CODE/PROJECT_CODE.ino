@@ -160,18 +160,15 @@ void loop() {
       Serial.print("Presence: ");
       Serial.print(presenceVal);
       Serial.println("cm^-1");
-
-    /*
-    // As long as there is a presence
-      while(presenceDetected(status)){
-        // Turn either TOWARDS or AWAY FROM the presence
-        turnCounterClockwise(100);
-      }
+      
+      // Turn either TOWARDS or AWAY FROM the presence
+      // (currently away)
+      //turnCounterClockwise(1100);
       // then run forward
-      moveForward(1000);
+      //moveForward(1000);
       // and activate speaker sound
-      playTone();
-      */
+      // (need to check the length and tone)
+      //playTone();
     }
   }
   
