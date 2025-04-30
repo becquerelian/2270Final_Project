@@ -23,6 +23,40 @@ float readDistanceLeft() {
   return distance;
 }
 
+// Obstacle check
+bool rightObstacleDetected(){
+  if(readDistanceRight() < obstacleDistance){
+    Serial.println("Right obstacle");
+    return 1;
+  }
+  else{
+    Serial.println("No R obstacle");
+    return 0;
+  }
+}
+
+bool leftObstacleDetected(){
+  if(readDistanceLeft() < obstacleDistance){
+    Serial.println("L obstacle");
+    return 1;
+  }
+  else{
+    Serial.println("No L obstacle");
+    return 0;
+  }
+}
+
+bool obstacleDetected(){
+  if(rightObstacleDetected() && leftObstacleDetected()){
+    Serial.println("Obstacle detected");
+    return 1;
+  }
+  else if(!rightObstacleDetected() && !leftObstacleDetected()){
+    Serial.println("No obstacle");
+    return 0;
+  }
+}
+
 // Print statements for debugging
 void ultrasonicDebug() {
   Serial.print(readDistanceRight());

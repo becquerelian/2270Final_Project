@@ -60,8 +60,8 @@ volatile bool interruptFlag = false;
 // Speaker
 const int speakerPin = 15;     // D15 = speaker
 
-int melody[] = {NOTE_DS8};
-int noteDurations[] = {20};
+int melody[] = {NOTE_DS8, END};
+int noteDurations[] = {20,20,};
 int speed = 90;
 
 // Other pins
@@ -134,12 +134,15 @@ void setup() {
 }
 
 
-/* CODE LOOP */
+/****************************************
+  CODE LOOP
+
+****************************************/
 
 void loop() {
   // Roll forward as long as no obstacle
-  while(readDistanceRight() > obstacleDistance && readDistanceLeft() > obstacleDistance){
-    moveForward(1000);
+  while(!obstacleDetected()){
+    moveForward(3000);
   }
 
   // OBSTACLE DETECTED
@@ -170,7 +173,7 @@ void loop() {
   delay(200);
 
   // Both sensors detect obstacle
-  if(readDistanceLeft() <= obstacleDistance && readDistanceRight() <= obstacleDistance){
+  if(obstacleDetected()){
     // Pick a random direction
     if(random(99) % 2 == 0){
       turnCounterClockwise(100);
@@ -180,11 +183,11 @@ void loop() {
     }
   }
   // Right sensor detects obstacle
-  else if(readDistanceRight() <= obstacleDistance){
+  else if(rightObstacleDetected()){
     turnCounterClockwise(100);
   }
   // Left sensor detects obstacle
-  else if(readDistanceLeft() <= obstacleDistance){
+  else if(leftObstacleDetected()){
     turnClockwise(100);
   }
 }
