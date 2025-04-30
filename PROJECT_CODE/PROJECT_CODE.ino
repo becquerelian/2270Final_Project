@@ -1,4 +1,7 @@
 /*
+  Will need to install library:
+  SparkFun_STHS34PF80_Arduino_Library
+
   ULTRASONIC SENSOR WIRING:
   Left
     VCC --> VCC
@@ -49,8 +52,6 @@ const int leftEchoPin = 3;          // D3 = receives pulse, reads distance
 const int leftTriggerPin = 5;       // D5 = sends pulse
 const int rightEchoPin = 20;        // D20 = receives pulse, reads distance
 const int rightTriggerPin = 21;     // D21 = sends pulse
-
-const int obstacleDistance = 10;
 
 // Presence sensor
 const int interruptPin = 14;        // D14 = interrupt
