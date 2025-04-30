@@ -40,7 +40,6 @@ const int pinLeftForward = 11;  // D11 = left FWD
 const int pinLeftBackward = 12; // D12 = left BACK
 
 const int maxPWM = 200;
-const int obstacleDistance = 50;
 
 volatile int rightPulses = 0;
 volatile int leftPulses = 0;
@@ -50,6 +49,8 @@ const int leftEchoPin = 3;          // D3 = receives pulse, reads distance
 const int leftTriggerPin = 5;       // D5 = sends pulse
 const int rightEchoPin = 20;        // D20 = receives pulse, reads distance
 const int rightTriggerPin = 21;     // D21 = sends pulse
+
+const int obstacleDistance = 10;
 
 // Presence sensor
 const int interruptPin = 14;        // D14 = interrupt
@@ -141,7 +142,7 @@ void setup() {
 
 void loop() {
   // Roll forward as long as no obstacle
-  while(!obstacleDetected()){
+  while(obstacleDetected() == 0){
     moveForward(3000);
   }
 
@@ -170,12 +171,14 @@ void loop() {
   }
   
   // Turn away from obstacle
-  delay(200);
 
   // Both sensors detect obstacle
-  if(obstacleDetected()){
-    // Pick a random direction
-    if(random(99) % 2 == 0){
+  if(obstacleDetected() == 1){
+    int distanceRight = readDistanceRight();
+    int distanceLeft = readDistanceLeft();
+
+    // Pick the best direction to turn in
+    if(distanceRight < distanceLeft){
       turnCounterClockwise(100);
     }
     else{
@@ -183,11 +186,11 @@ void loop() {
     }
   }
   // Right sensor detects obstacle
-  else if(rightObstacleDetected()){
+  else if(obstacleDetected() == 2){
     turnCounterClockwise(100);
   }
   // Left sensor detects obstacle
-  else if(leftObstacleDetected()){
+  else if(obstacleDetected() == 3){
     turnClockwise(100);
   }
 }

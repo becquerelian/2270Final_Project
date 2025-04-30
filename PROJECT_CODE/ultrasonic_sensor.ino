@@ -26,33 +26,46 @@ float readDistanceLeft() {
 // Obstacle check
 bool rightObstacleDetected(){
   if(readDistanceRight() < obstacleDistance){
-    Serial.println("Right obstacle");
     return 1;
   }
   else{
-    Serial.println("No R obstacle");
     return 0;
   }
 }
 
 bool leftObstacleDetected(){
   if(readDistanceLeft() < obstacleDistance){
-    Serial.println("L obstacle");
     return 1;
   }
   else{
-    Serial.println("No L obstacle");
     return 0;
   }
 }
 
-bool obstacleDetected(){
-  if(rightObstacleDetected() && leftObstacleDetected()){
-    Serial.println("Obstacle detected");
+// 0 = no obstacle
+// 1 = both sides obstacle
+// 2 = right obstacle
+// 3 = left obstacle
+int obstacleDetected(){
+  int distanceRight = readDistanceRight();
+  int distanceLeft = readDistanceLeft();
+  Serial.println(distanceRight);
+  Serial.println(distanceLeft);
+
+  if((distanceRight < 10) && (distanceLeft < 10)){
+    Serial.println("Obstacle detected: ");
     return 1;
   }
-  else if(!rightObstacleDetected() && !leftObstacleDetected()){
-    Serial.println("No obstacle");
+  else if((distanceRight < 10) && (distanceLeft >= 10)){
+    Serial.println("R obstacle detected: ");
+    return 2;
+  }
+  else if((distanceRight >= 10) && (distanceLeft < 10)){
+    Serial.println("L obstacle detected: ");
+    return 3;
+  }
+  else{
+    Serial.println("No obstacle: ");
     return 0;
   }
 }
