@@ -24,24 +24,6 @@ float readDistanceLeft() {
 }
 
 // Obstacle check
-bool rightObstacleDetected(){
-  if(readDistanceRight() < obstacleDistance){
-    return 1;
-  }
-  else{
-    return 0;
-  }
-}
-
-bool leftObstacleDetected(){
-  if(readDistanceLeft() < obstacleDistance){
-    return 1;
-  }
-  else{
-    return 0;
-  }
-}
-
 // 0 = no obstacle
 // 1 = both sides obstacle
 // 2 = right obstacle

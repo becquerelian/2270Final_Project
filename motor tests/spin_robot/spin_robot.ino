@@ -22,12 +22,12 @@ void setup() {
   digitalWrite(pinRightForward, LOW);
   digitalWrite(pinRightBackward, LOW);
 
-  analogWrite(pinLeftPWM, 200);       // set Vref, duty-cycle 200/255
-  analogWrite(pinRightPWM, 200);
+  analogWrite(pinLeftPWM, 255);       // set Vref, duty-cycle 200/255
+  analogWrite(pinRightPWM, 255);
 }
 
 void loop() {
-  do {} while (digitalRead(pinON) == HIGH); // wait for ON switch
+  //do {} while (digitalRead(pinON) == HIGH); // wait for ON switch
 
   delay(1000);
 
